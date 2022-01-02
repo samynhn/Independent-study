@@ -33,12 +33,10 @@ import pickle
 import json
 import base64
 
-# data = {}
-# with open('test.jpg', mode='rb') as file:
-#     img = file.read()
-# data['img'] = base64.encodebytes(img).decode('utf-8')
 def im2json(im):
     imdata = pickle.dumps(im)
+    print(type(imdata))
+    print(len(imdata))
     jstr = json.dumps({"image": base64.b64encode(imdata).decode('utf-8')})
     return jstr
 
@@ -50,7 +48,7 @@ def json2im(jstr):
 
 
 from PIL import Image
-img = Image.open("test.jpg")
+img = Image.open("test1.jpg")
 jstr = im2json(img)
 result_img = json2im(jstr)
 result_img.show()

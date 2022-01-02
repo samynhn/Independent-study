@@ -1,5 +1,8 @@
 import socket 
 import threading
+import pickle
+import json
+import base64
 
 HEADER = 64
 PORT = 5050
@@ -10,6 +13,19 @@ DISCONNECT_MESSAGE = "!DISCONNECT"
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
+
+def im2json(im):
+    imdata = pickle.dumps(im)
+    print(type(imdata))
+    print(len(imdata))
+    jstr = json.dumps({"image": base64.b64encode(imdata).decode('utf-8')})
+    return jstr
+
+def json2im(jstr):
+    load = json.loads(jstr)
+    imdata = base64.b64decode(load['image'])
+    im = pickle.loads(imdata)
+    return im
 
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
@@ -22,8 +38,10 @@ def handle_client(conn, addr):
             msg = conn.recv(msg_length).decode(FORMAT)# after first msg is header, others msg are messager
             if msg == DISCONNECT_MESSAGE: #close connection
                 connected = False
-
-            print(f"[{addr}] {msg}")
+            else:
+                img = json2im(msg)
+                img.show()
+            # print(f"[{addr}] {msg}")
             conn.send("Msg received".encode(FORMAT))
 
     conn.close()
