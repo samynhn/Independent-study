@@ -1,5 +1,7 @@
 import multiprocessing as mp
 import torch
+import json
+import base64
 
 def check_gpu_detail():
     print('If GPU available : ',torch.cuda.is_available()) # true check GPU if available
@@ -24,4 +26,45 @@ def check_type_length():
     send_length += b' ' * (HEADER - len(send_length))
     print(len(send_length))
 
-check_type_length()
+# check_type_length()
+
+
+import pickle
+import json
+import base64
+
+# data = {}
+# with open('test.jpg', mode='rb') as file:
+#     img = file.read()
+# data['img'] = base64.encodebytes(img).decode('utf-8')
+def im2json(im):
+    imdata = pickle.dumps(im)
+    jstr = json.dumps({"image": base64.b64encode(imdata).decode('utf-8')})
+    return jstr
+
+def json2im(jstr):
+    load = json.loads(jstr)
+    imdata = base64.b64decode(load['image'])
+    im = pickle.loads(imdata)
+    return im
+
+
+from PIL import Image
+img = Image.open("test.jpg")
+jstr = im2json(img)
+result_img = json2im(jstr)
+result_img.show()
+############# method 2 #############
+# import cv2
+# img = cv2.imread('test.jpg')
+# jstr = im2json(img)
+# result_img = json2im(jstr)
+# cv2.imshow('test.jpg', result_img)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+############# method 3 #############
+# import matplotlib.pyplot as plt
+# img = plt.imread('test.jpg')
+# jstr = im2json(img)
+# result_img = json2im(jstr)
+# plt.imshow(result_img)
