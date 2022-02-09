@@ -35,7 +35,7 @@ def json2im(jstr):
     im = pickle.loads(imdata)
     return im
 
-img1 = Image.open("./sourse/test1.jpg")
+img1 = Image.open("../sourse/test1.jpg")
 jstr1 = im2json(img1)
 img2 = Image.open("../sourse/test2.jpg")
 jstr2 = im2json(img2)

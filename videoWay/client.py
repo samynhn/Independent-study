@@ -7,13 +7,18 @@ import numpy as np
 from PIL import Image
 HEADER = 64
 PORT = 5050
+PORT2 = 5060#to server2
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
+ADDR2 = (SERVER, PORT2)#to server2
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(ADDR)
+
+client2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)#to server2
+client2.connect(ADDR2)#to server2
 
 def send(msg):
     message = msg.encode(FORMAT) # convert string to bytes
@@ -23,6 +28,15 @@ def send(msg):
     client.send(send_length)
     client.send(message)
     print(client.recv(2048).decode(FORMAT))
+#to server2
+def send2(msg):
+    message = msg.encode(FORMAT) # convert string to bytes
+    msg_length = len(message)
+    send_length = str(msg_length).encode(FORMAT)
+    send_length += b' ' * (HEADER - len(send_length)) # make length == 64 bytes 
+    client2.send(send_length)
+    client2.send(message)
+    print(client2.recv(2048).decode(FORMAT))
 
 def im2json(im):
     imdata = pickle.dumps(im)
@@ -37,47 +51,27 @@ def json2im(jstr):
     im = pickle.loads(imdata)
     return im
 
-# img1 = Image.open("test1.jpg")
-# jstr1 = im2json(img1)
-# img2 = Image.open("test2.jpg")
-# jstr2 = im2json(img2)
-# img3 = Image.open("test3.jpg")
-# jstr3 = im2json(img3)
-# img4 = Image.open("test4.jpg")
-# jstr4 = im2json(img4)
-# img5 = Image.open("test5.jpg")
-# jstr5 = im2json(img5)
-# # result_img = json2im(jstr)
-
-# input()
-# send(jstr1)
-# input()
-# send(jstr2)
-# input()
-# send(jstr3)
-# input()
-# send(jstr4)
-# input()
-# send(jstr5)
-# input()
 
 cap = cv2.VideoCapture('../sourse/test.mp4')
 count = 1
-
 while(cap.isOpened()):
   ret, frame = cap.read()
   if ret is True:
     count += 1
-    if(count%7==0):
+    #video to the model1
+    if(count%2==0):
       opencv_image = cv2.resize(frame, (416, 416))
       color_coverted = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2RGB)
       pil_image=Image.fromarray(color_coverted)
       jstr = im2json(pil_image)
       send(jstr)
-      
-      
+    #video to the model1
     else:      
-      continue
+      opencv_image = cv2.resize(frame, (416, 416))
+      color_coverted = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2RGB)
+      pil_image=Image.fromarray(color_coverted)
+      jstr = im2json(pil_image)
+      send2(jstr)
   
     if cv2.waitKey(1) & 0xFF == ord('q'):
       break
