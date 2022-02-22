@@ -16,6 +16,11 @@ DISCONNECT_MESSAGE = "!DISCONNECT"
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
+#for writing video in line 61
+fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+out = cv2.VideoWriter('../outputVideo/output1.avi',fourcc, 20.0, (416,416))
+
+
 def im2json(im):
     imdata = pickle.dumps(im)
     # print(type(imdata))
@@ -48,11 +53,12 @@ def handle_client(conn, addr):
             if msg == DISCONNECT_MESSAGE: #close connection
                 connected = False
                 conn.send("Finish".encode(FORMAT))
-            else:
+            else:#convert message back to video
                 pil_img = json2im(msg)
                 # pil_img.show()
                 numpy_image=np.array(pil_img)
                 opencv_image=cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR) 
+                out.write(opencv_image)
                 cv2.imshow('output', opencv_image)
                 cv2.waitKey(1)
                 

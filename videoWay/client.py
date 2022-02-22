@@ -40,8 +40,6 @@ def send2(msg):
 
 def im2json(im):
     imdata = pickle.dumps(im)
-    print(type(imdata))
-    print(len(imdata))
     jstr = json.dumps({"image": base64.b64encode(imdata).decode('utf-8')})
     return jstr
 

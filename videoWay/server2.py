@@ -16,6 +16,10 @@ DISCONNECT_MESSAGE = "!DISCONNECT"
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
+fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+out = cv2.VideoWriter('../outputVideo/output2.avi',fourcc, 20.0, (416,416))
+
+
 def im2json(im):
     imdata = pickle.dumps(im)
     # print(type(imdata))
@@ -53,8 +57,11 @@ def handle_client(conn, addr):
                 # pil_img.show()
                 numpy_image=np.array(pil_img)
                 opencv_image=cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR) 
+                out.write(opencv_image)
                 cv2.imshow('output', opencv_image)
                 cv2.waitKey(1)
+                ########<add your model here>########
+                ########</add your moel here>########
                 
             # print(f"[{addr}] {msg}")
             conn.send("Msg received by server2".encode(FORMAT))
