@@ -19,7 +19,7 @@ def plot( namesfile, weight_file, img):
     #     transform_to_onnx(cfg_file, weight_file, batch_size)
     #     # Transform to onnx as demo
     #     onnx_path_demo = transform_to_onnx(cfg_file, weight_file, 1)
-    img=255*np.array(img).astype("uint8")
+    # img=255*np.array(img).astype("uint8")
     img=cv2.cvtColor(np.array(img),cv2.COLOR_RGB2BGR)
     session = onnxruntime.InferenceSession(weight_file)
     # session = onnx.load(onnx_path)

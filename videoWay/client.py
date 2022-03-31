@@ -2,6 +2,7 @@ import socket
 import pickle
 import json
 import base64
+import time
 import cv2
 import numpy as np
 from PIL import Image
@@ -52,6 +53,7 @@ def json2im(jstr):
 
 cap = cv2.VideoCapture('../sourse/test.mp4')
 count = 1
+start = time.time()
 while(cap.isOpened()):
   ret, frame = cap.read()
   if ret is True:
@@ -74,6 +76,8 @@ while(cap.isOpened()):
     if cv2.waitKey(1) & 0xFF == ord('q'):
       break
   else: # when ret == False(when video is over) , we must make it jump off the while loop manually.
+    end = time.time()
+    print("Total Time : ",end- start)
     break
 
 cap.release()
