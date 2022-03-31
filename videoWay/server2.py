@@ -16,6 +16,7 @@ DISCONNECT_MESSAGE = "!DISCONNECT"
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
+#for writing video in line 61
 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
 out = cv2.VideoWriter('../outputVideo/output2.avi',fourcc, 20.0, (416,416))
 
@@ -52,7 +53,7 @@ def handle_client(conn, addr):
             if msg == DISCONNECT_MESSAGE: #close connection
                 connected = False
                 conn.send("Finish".encode(FORMAT))
-            else:
+            else:#convert message back to video
                 pil_img = json2im(msg)
                 # pil_img.show()
                 numpy_image=np.array(pil_img)
