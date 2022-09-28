@@ -39,7 +39,7 @@ def json2im(jstr):
 
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
-
+    timer = 0
     connected = True
     # print("e")
     # time.sleep(1)
@@ -54,17 +54,19 @@ def handle_client(conn, addr):
                 connected = False
                 conn.send("Finish".encode(FORMAT))
             else:#convert message back to video
+                timer += 1
                 pil_img = json2im(msg)
                 # pil_img.show()
                 numpy_image=np.array(pil_img)
                 opencv_image=cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR) 
                 out.write(opencv_image)
-                cv2.imshow('output', opencv_image)
-                cv2.waitKey(1)
+                # cv2.imshow('output', opencv_image)
+                # cv2.waitKey(1)
                 
             # print(f"[{addr}] {msg}")
             conn.send("Msg received by server1".encode(FORMAT))
     cv2.destroyAllWindows()
+    print(timer)
     conn.close()
         
 

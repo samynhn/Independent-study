@@ -7,7 +7,7 @@ import numpy as np    # we're going to use numpy to process input and output dat
 import cv2
 import time
 HEADER = 64
-PORT = 5060
+PORT = 5070
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
@@ -66,7 +66,7 @@ def handle_client(conn, addr):
                 ########</add your moel here>########
                 
             # print(f"[{addr}] {msg}")
-            conn.send("Msg received by server2".encode(FORMAT))
+            conn.send("Msg received by server3".encode(FORMAT))
     cv2.destroyAllWindows()
     print(timer)
     conn.close()
