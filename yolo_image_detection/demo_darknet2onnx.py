@@ -10,7 +10,10 @@ from tool.utils import *
 from tool.darknet2onnx import *
 
 
-def plot( namesfile, weight_file, img):
+def plot(img):
+
+    namesfile = "files/coco.names"
+    weight_file = "yolov4_1_3_416_416_static.onnx"
 
     # if batch_size <= 0:
     #     onnx_path_demo = transform_to_onnx(cfg_file, weight_file, batch_size)
@@ -20,7 +23,7 @@ def plot( namesfile, weight_file, img):
     #     # Transform to onnx as demo
     #     onnx_path_demo = transform_to_onnx(cfg_file, weight_file, 1)
     # img=255*np.array(img).astype("uint8")
-    img=cv2.cvtColor(np.array(img),cv2.COLOR_RGB2BGR)
+    # img=cv2.cvtColor(np.array(img),cv2.COLOR_RGB2BGR)
     session = onnxruntime.InferenceSession(weight_file)
     # session = onnx.load(onnx_path)
     print("The model expects input shape: ", session.get_inputs()[0].shape)

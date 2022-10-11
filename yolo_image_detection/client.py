@@ -2,6 +2,7 @@ import socket
 import pickle
 import json
 import base64
+import time
 from PIL import Image 
 
 HEADER = 64
@@ -47,15 +48,18 @@ jstr4 = im2json(img4)
 #img5 = Image.open("../sourse/test5.jpg")
 #jstr5 = im2json(img5)
 #result_img = json2im(jstr)
+start = time.time()
 
-input()
+# input()
 send(jstr1)
-input()
+# input()
 send(jstr2)
-input()
+# input()
 send(jstr3)
-input()
+# input()
 send(jstr4)
+end = time.time()
+print("total time: ", end-start," second")
 #input()
 #send(jstr5)
 #input()

@@ -4,7 +4,7 @@ from PIL import Image
 
 cap = cv2.VideoCapture('test.mp4')
 count = 1
-img = Image.open("test1.jpg")
+# img = Image.open("test1.jpg")
 
 while(cap.isOpened()):
   ret, frame = cap.read()
