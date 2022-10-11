@@ -22,8 +22,10 @@ from demo_darknet2onnx import *
 from tool.darknet2onnx import *
 from tool.utils import *
 
-NUMBER_OF_PROCESSES = 8
-NUMBER_OF_THREADS = 30
+
+# multiprocessing最多以自己電腦cpu數量為主
+NUMBER_OF_PROCESSES = mp.cpu_count
+NUMBER_OF_THREADS = 20
 NUMBER_OF_JOBS = NUMBER_OF_PROCESSES*NUMBER_OF_THREADS
 
 img1 = Image.open("../sourse/test1.jpg")
@@ -41,11 +43,11 @@ def detect(img_array):
 
 time_arr = []
 
-# NUMBER_OF_PROCESSES = 8
-# NUMBER_OF_THREADS = 8
-# NUMBER_OF_JOBS = 8
-################################
 if __name__ == '__main__':
+# 一定要加這行，不然會出現錯誤
+
+################################平行處理################################
+
     img_array = []
     input_array = []
     for i in range(NUMBER_OF_THREADS):
@@ -63,7 +65,8 @@ if __name__ == '__main__':
     time_arr.append(end-start)
     print("## 1.Cost : ", end-start, "second")
 
-################################
+
+################################依序處理################################
 
     # start1 = time.time()
     # for i in range(NUMBER_OF_JOBS):
